@@ -1,0 +1,135 @@
+:root {
+  --main-color: #01352e;
+  --contrast-color: #d9d199;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #013e36;
+  color: var(--contrast-color);
+  margin: 0;
+  height: 100vh;
+}
+#root {
+  height: 100vh;
+}
+
+.container {
+  position: relative;
+  border: var(--contrast-color) 10px double;
+  height: 100%;
+  box-sizing: border-box;
+  align-content: center;
+  overflow: hidden;
+}
+
+.corner-circle {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  background-color: var(--main-color);
+  border-radius: 50%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.corner-circle.top-left {
+  border-bottom: var(--contrast-color) 5px solid;
+  border-right: var(--contrast-color) 5px solid;
+  top: -50px;
+  left: -50px;
+}
+
+.corner-circle.top-right {
+  border-bottom: var(--contrast-color) 5px solid;
+  border-left: var(--contrast-color) 5px solid;
+  top: -50px;
+  right: -50px;
+}
+
+.corner-circle.bottom-left {
+  border-top: var(--contrast-color) 5px solid;
+  border-right: var(--contrast-color) 5px solid;
+  bottom: -50px;
+  left: -50px;
+}
+
+.corner-circle.bottom-right {
+  border-top: var(--contrast-color) 5px solid;
+  border-left: var(--contrast-color) 5px solid;
+  bottom: -50px;
+  right: -50px;
+}
+
+.minicontainer {
+  display: flex;
+  margin: 0 auto;
+  width: 70%;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.date {
+  text-align: center;
+}
+
+.prayer-times {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  color: var(--contrast-color);
+}
+
+.prayer-time {
+  padding: 5px;
+  width: 250px;
+  margin: 5px;
+  border: 2px var(--contrast-color) solid;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: var(--main-color);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.prayer-time h2 {
+  margin: 0 0;
+  font-size: 25px;
+}
+
+.prayer-time p {
+  margin: 5px 0;
+  font-size: 20px;
+}
+
+.next-prayer {
+  background-color: var(--contrast-color);
+  color: var(--main-color);
+  font-weight: bold;
+  box-shadow: 0 0 20px #b0aa7b;
+}
+
+@media screen and (max-width: 1140px) {
+  .minicontainer {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .minicontainer {
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+}
