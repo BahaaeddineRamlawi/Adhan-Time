@@ -20,11 +20,8 @@ const AdhanTimes = () => {
         if (data.code === 200 && data.status === "OK") {
           const timings = data.data.timings;
           const hijriDate = data.data.date.hijri;
-          const gregorianDate = data.data.date.gregorian;
-          const day = data.data.date.readable;
 
           setDateInfo({
-            gregorian: `${gregorianDate.weekday.en} ${day}`,
             hijri: `${hijriDate.day} ${hijriDate.month.en} (${hijriDate.month.ar}) ${hijriDate.year}`,
           });
 
@@ -80,8 +77,7 @@ const AdhanTimes = () => {
         </div>
         {dateInfo && (
           <div className="date">
-            <p>Date: {dateInfo.gregorian}</p>
-            <p>Hijri Date: {dateInfo.hijri}</p>
+            <p>{dateInfo.hijri}</p>
           </div>
         )}
         <div className="prayer-times">
