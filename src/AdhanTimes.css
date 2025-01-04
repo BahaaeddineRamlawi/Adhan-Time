@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400..700&display=swap');
+
 :root {
   --main-color: #01352e;
   --contrast-color: #d9d199;
@@ -9,6 +11,10 @@ body {
   color: var(--contrast-color);
   margin: 0;
   height: 100vh;
+  font-family: "Noto Naskh Arabic", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  line-height: 25px;
 }
 #root {
   height: 100vh;
@@ -77,11 +83,16 @@ body {
 
 .header h1 {
   margin: 0;
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .date {
   text-align: center;
+  line-height: 30px;
+}
+
+.date p{
+  margin: 0;
 }
 
 .prayer-times {
@@ -104,13 +115,14 @@ body {
 }
 
 .prayer-time h2 {
-  margin: 0 0;
-  font-size: 25px;
+  margin: 0;
+  margin-top: 3px;
+  font-size: 21px;
 }
 
 .prayer-time p {
-  margin: 5px 0;
-  font-size: 20px;
+  margin: 0;
+  font-size: 16px;
 }
 
 .next-prayer {

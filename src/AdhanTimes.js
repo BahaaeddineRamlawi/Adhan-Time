@@ -55,11 +55,14 @@ const AdhanTimes = () => {
       const prayerTimeWithBuffer = new Date(
         prayerTime.getTime() + 15 * 60 * 1000
       );
-
       if (currentTime >= prayerTime && currentTime <= prayerTimeWithBuffer) {
         nextPrayerIndex = i;
         break;
       }
+    }
+
+    if (nextPrayerIndex === -1) {
+      nextPrayerIndex = 0;
     }
 
     setNextPrayerIndex(nextPrayerIndex);
@@ -74,12 +77,12 @@ const AdhanTimes = () => {
       <div className="minicontainer">
         <div className="header">
           <h1>Adhan Times in Saida</h1>
+          {dateInfo && (
+            <div className="date">
+              <p>{dateInfo.hijri}</p>
+            </div>
+          )}
         </div>
-        {dateInfo && (
-          <div className="date">
-            <p>{dateInfo.hijri}</p>
-          </div>
-        )}
         <div className="prayer-times">
           {prayerTimes.map((prayer, index) => (
             <div
