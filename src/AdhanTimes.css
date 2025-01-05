@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400..700&display=swap");
 
 :root {
   --main-color: #01352e;
@@ -86,13 +86,22 @@ body {
   font-size: 25px;
 }
 
+.header p {
+  margin: 2px;
+}
+
 .date {
   text-align: center;
   line-height: 30px;
 }
 
-.date p{
-  margin: 0;
+.date p {
+  margin: 0 auto;
+  padding-top: 1px;
+  color: var(--main-color);
+  background-color: #d9d299e5;
+  border: 1px solid var(--main-color);
+  width: 270px;
 }
 
 .prayer-times {

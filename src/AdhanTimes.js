@@ -3,16 +3,58 @@ import "./AdhanTimes.css";
 
 const AdhanTimes = () => {
   const [dateInfo, setDateInfo] = useState(null);
+  const [day, setDay] = useState(null);
   const [prayerTimes, setPrayerTimes] = useState([]);
   const [nextPrayerIndex, setNextPrayerIndex] = useState(-1);
+  const [showGregorianDate, setShowGregorianDate] = useState(true);
+  const [location, setLocation] = useState(null);
 
+  // Get user's location
   useEffect(() => {
+    const getCurrentLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+          },
+          (error) => {
+            console.error("Error retrieving location:", error);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    getCurrentLocation();
+  }, []);
+
+  // Fetch prayer times only after location is set
+  useEffect(() => {
+    if (!location) return; // Wait until location is available
+
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
     const dateString = `${day}-${month}-${year}`;
-    const apiUrl = `https://api.aladhan.com/v1/timings/${dateString}?latitude=33.5731084&longitude=35.3806842&method=2`;
+    const apiUrl = `https://api.aladhan.com/v1/timings/${dateString}?latitude=${location.latitude}&longitude=${location.longitude}&method=2`;
+
+    const traditionalMonths = {
+      January: "كانون الثاني",
+      February: "شباط",
+      March: "آذار",
+      April: "نيسان",
+      May: "أيار",
+      June: "حزيران",
+      July: "تموز",
+      August: "آب",
+      September: "أيلول",
+      October: "تشرين الأول",
+      November: "تشرين الثاني",
+      December: "كانون الأول",
+    };
 
     fetch(apiUrl)
       .then((response) => response.json())
@@ -20,9 +62,14 @@ const AdhanTimes = () => {
         if (data.code === 200 && data.status === "OK") {
           const timings = data.data.timings;
           const hijriDate = data.data.date.hijri;
+          const gregorianDate = data.data.date.gregorian;
+          setDay(
+            `${gregorianDate.weekday.en} - ${hijriDate.weekday.en} ( ${hijriDate.weekday.ar} )`
+          );
 
           setDateInfo({
-            hijri: `${hijriDate.day} ${hijriDate.month.en} (${hijriDate.month.ar}) ${hijriDate.year}`,
+            hijri: `${hijriDate.day} ${hijriDate.month.en} ( ${hijriDate.month.ar} ) ${hijriDate.year}`,
+            gregorian: `${gregorianDate.day} ${gregorianDate.month.en} ( ${traditionalMonths[gregorianDate.month.en]} ) ${gregorianDate.year}`,
           });
 
           const prayers = [
@@ -41,6 +88,14 @@ const AdhanTimes = () => {
         }
       })
       .catch((error) => console.error("Error:", error));
+  }, [location]);
+
+  useEffect(() => {
+    const toggleInterval = setInterval(() => {
+      setShowGregorianDate((prev) => !prev);
+    }, 15000);
+
+    return () => clearInterval(toggleInterval);
   }, []);
 
   const highlightNextPrayer = (prayers) => {
@@ -83,10 +138,11 @@ const AdhanTimes = () => {
       <div className="corner-circle bottom-right"></div>
       <div className="minicontainer">
         <div className="header">
-          <h1>Adhan Times in Saida</h1>
+          <h1>Adhan Times in your location</h1>
+          <p>{day}</p>
           {dateInfo && (
             <div className="date">
-              <p>{dateInfo.hijri}</p>
+              <p>{showGregorianDate ? dateInfo.gregorian : dateInfo.hijri}</p>
             </div>
           )}
         </div>
