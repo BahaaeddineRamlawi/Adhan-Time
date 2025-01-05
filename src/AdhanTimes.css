@@ -93,6 +93,8 @@ body {
 .date {
   text-align: center;
   line-height: 30px;
+  position: relative;
+  height: 40px;
 }
 
 .date p {
@@ -100,8 +102,22 @@ body {
   padding-top: 1px;
   color: var(--main-color);
   background-color: #d9d299e5;
-  border: 1px solid var(--main-color);
+  border: 3px double var(--main-color);
+  border-radius: 5px;
   width: 270px;
+  transition: opacity 1s ease-in-out;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.date .fade-in {
+  opacity: 1;
+}
+
+.date .fade-out {
+  opacity: 0;
 }
 
 .prayer-times {

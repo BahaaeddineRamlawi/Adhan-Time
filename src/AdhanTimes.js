@@ -8,8 +8,9 @@ const AdhanTimes = () => {
   const [nextPrayerIndex, setNextPrayerIndex] = useState(-1);
   const [showGregorianDate, setShowGregorianDate] = useState(true);
   const [location, setLocation] = useState(null);
+  const [locationError, setLocationError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Get user's location
   useEffect(() => {
     const getCurrentLocation = () => {
       if (navigator.geolocation) {
@@ -17,22 +18,25 @@ const AdhanTimes = () => {
           (position) => {
             const { latitude, longitude } = position.coords;
             setLocation({ latitude, longitude });
+            setLocationError(null);
           },
           (error) => {
+            setLocationError(
+              "Unable to retrieve your location. Please enable location services."
+            );
             console.error("Error retrieving location:", error);
           }
         );
       } else {
-        console.error("Geolocation is not supported by this browser.");
+        setLocationError("Geolocation is not supported by this browser.");
       }
     };
 
     getCurrentLocation();
   }, []);
 
-  // Fetch prayer times only after location is set
   useEffect(() => {
-    if (!location) return; // Wait until location is available
+    if (!location) return;
 
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
@@ -56,9 +60,12 @@ const AdhanTimes = () => {
       December: "كانون الأول",
     };
 
+    setIsLoading(true);
+
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
+        setIsLoading(false);
         if (data.code === 200 && data.status === "OK") {
           const timings = data.data.timings;
           const hijriDate = data.data.date.hijri;
@@ -69,7 +76,9 @@ const AdhanTimes = () => {
 
           setDateInfo({
             hijri: `${hijriDate.day} ${hijriDate.month.en} ( ${hijriDate.month.ar} ) ${hijriDate.year}`,
-            gregorian: `${gregorianDate.day} ${gregorianDate.month.en} ( ${traditionalMonths[gregorianDate.month.en]} ) ${gregorianDate.year}`,
+            gregorian: `${gregorianDate.day} ${gregorianDate.month.en} ( ${
+              traditionalMonths[gregorianDate.month.en]
+            } ) ${gregorianDate.year}`,
           });
 
           const prayers = [
@@ -83,20 +92,26 @@ const AdhanTimes = () => {
           setPrayerTimes(prayers);
 
           highlightNextPrayer(prayers);
+
+          startToggleInterval();
         } else {
+          setIsLoading(false);
           console.error("Error fetching data from API");
         }
       })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {
+        setIsLoading(false);
+        console.error("Error:", error);
+      });
   }, [location]);
 
-  useEffect(() => {
+  const startToggleInterval = () => {
     const toggleInterval = setInterval(() => {
       setShowGregorianDate((prev) => !prev);
-    }, 15000);
+    }, 10000);
 
     return () => clearInterval(toggleInterval);
-  }, []);
+  };
 
   const highlightNextPrayer = (prayers) => {
     const currentTime = new Date();
@@ -138,12 +153,22 @@ const AdhanTimes = () => {
       <div className="corner-circle bottom-right"></div>
       <div className="minicontainer">
         <div className="header">
-          <h1>Adhan Times in your location</h1>
+          <h1>Adhan Times in Your Location</h1>
           <p>{day}</p>
-          {dateInfo && (
-            <div className="date">
-              <p>{showGregorianDate ? dateInfo.gregorian : dateInfo.hijri}</p>
-            </div>
+          {locationError && <p className="error">{locationError}</p>}
+          {isLoading ? (
+            <p>Loading prayer times...</p>
+          ) : (
+            dateInfo && (
+              <div className="date">
+                <p className={`${showGregorianDate ? "fade-in" : "fade-out"}`}>
+                  {dateInfo.gregorian}
+                </p>
+                <p className={`${showGregorianDate ? "fade-out" : "fade-in"}`}>
+                  {dateInfo.hijri}
+                </p>
+              </div>
+            )
           )}
         </div>
         <div className="prayer-times">
