@@ -48,6 +48,8 @@ const AdhanTimes = () => {
     let nextPrayerIndex = -1;
 
     for (let i = 0; i < prayers.length; i++) {
+      if (!prayers[i] || !prayers[i].time) continue;
+
       const [hours, minutes] = prayers[i].time.split(":");
       const prayerTime = new Date();
       prayerTime.setHours(hours, minutes, 0);
@@ -55,9 +57,14 @@ const AdhanTimes = () => {
       const prayerTimeWithBuffer = new Date(
         prayerTime.getTime() + 15 * 60 * 1000
       );
+
       if (currentTime >= prayerTime && currentTime <= prayerTimeWithBuffer) {
         nextPrayerIndex = i;
         break;
+      }
+
+      if (currentTime < prayerTime && nextPrayerIndex === -1) {
+        nextPrayerIndex = i;
       }
     }
 
