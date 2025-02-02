@@ -43,7 +43,7 @@ const AdhanTimes = () => {
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
     const dateString = `${day}-${month}-${year}`;
-    const apiUrl = `https://api.aladhan.com/v1/timings/${dateString}?latitude=${location.latitude}&longitude=${location.longitude}&method=2`;
+    const apiUrl = `https://api.aladhan.com/v1/timings/${dateString}?latitude=${location.latitude}&longitude=${location.longitude}&method=11`;
 
     const traditionalMonths = {
       January: "كانون الثاني",
